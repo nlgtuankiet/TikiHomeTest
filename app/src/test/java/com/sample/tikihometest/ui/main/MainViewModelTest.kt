@@ -1,0 +1,54 @@
+package com.sample.tikihometest.ui.main
+
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.reset
+import com.sample.tikihometest.R
+import com.sample.tikihometest.domain.entity.KeywordItem
+import com.sample.tikihometest.domain.usecase.GetKeywordItems
+import com.sample.tikihometest.util.awaitValue
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mockito.`when`
+import org.robolectric.RobolectricTestRunner
+
+@RunWith(RobolectricTestRunner::class)
+class MainViewModelTest {
+    private val getKeywordItems: GetKeywordItems = mock()
+    private lateinit var mainViewModel: MainViewModel
+
+    @Before
+    fun setup() {
+        reset(getKeywordItems)
+    }
+
+    @Test
+    fun `loadKeywordItems success`() = runBlocking {
+        val keywordItems = listOf(
+            KeywordItem("a", 1),
+            KeywordItem("blue", 2)
+        )
+        `when`(getKeywordItems.invoke()) doReturn keywordItems
+        mainViewModel = MainViewModel(getKeywordItems)
+        mainViewModel.loadKeywordItems()
+
+        val actual = mainViewModel.keywordItems.awaitValue()
+
+        Assert.assertEquals(keywordItems, actual)
+    }
+
+    @Test
+    fun `loadKeywordItems fail`() = runBlocking {
+        `when`(getKeywordItems.invoke()) doThrow RuntimeException()
+        mainViewModel = MainViewModel(getKeywordItems)
+        mainViewModel.loadKeywordItems()
+
+        val actual = mainViewModel.errorEvent.awaitValue()
+
+        Assert.assertEquals(R.string.main_load_keyword_failed, actual.getContentIfNotHandled())
+    }
+}
