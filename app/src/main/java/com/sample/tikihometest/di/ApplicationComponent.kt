@@ -4,7 +4,6 @@ import com.sample.tikihometest.TikiApplication
 import com.sample.tikihometest.data.di.DataComponent
 import com.sample.tikihometest.domain.di.DomainComponent
 import com.sample.tikihometest.ui.main.di.MainActivityModule
-import com.sample.tikihometest.ui.viewmodel.ViewModelFactoryBindingModule
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -12,8 +11,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 @ApplicationScope
 @Component(modules = [
     AndroidSupportInjectionModule::class,
-    MainActivityModule::class,
-    ViewModelFactoryBindingModule::class
+    MainActivityModule::class
 ],
     dependencies = [
         DataComponent::class,

@@ -11,15 +11,12 @@ import com.sample.tikihometest.domain.entity.KeywordItem
 import com.sample.tikihometest.util.inflater
 
 class KeywordItemAdapter constructor(
-    mainViewModel: MainViewModel,
     private val lifecycleOwner: LifecycleOwner
 ) : RecyclerView.Adapter<KeywordItemViewHolder>() {
     private val differ = AsyncListDiffer(this, DiffCallback)
 
-    init {
-        mainViewModel.keywordItems.observe(lifecycleOwner) {
-            differ.submitList(it)
-        }
+    fun submitList(list: List<KeywordItem>?) {
+        differ.submitList(list)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KeywordItemViewHolder {

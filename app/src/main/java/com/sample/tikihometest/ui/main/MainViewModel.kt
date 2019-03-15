@@ -1,34 +1,36 @@
 package com.sample.tikihometest.ui.main
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.BaseMvRxViewModel
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
+import com.sample.tikihometest.BuildConfig
 import com.sample.tikihometest.R
 import com.sample.tikihometest.core.Event
-import com.sample.tikihometest.domain.entity.KeywordItem
+import com.sample.tikihometest.core.ViewModelFactory
 import com.sample.tikihometest.domain.usecase.GetKeywordItems
-import com.sample.tikihometest.util.postValueIfNew
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class MainViewModel @Inject constructor(
+class MainViewModel @AssistedInject constructor(
+    @Assisted initialState: MainFragmentState,
     private val getKeywordItems: GetKeywordItems
-) : ViewModel() {
+) : BaseMvRxViewModel<MainFragmentState>(
+    initialState = initialState,
+    debugMode = BuildConfig.DEBUG
+) {
+
+    @AssistedInject.Factory
+    interface Factory : ViewModelFactory<MainFragmentState, MainViewModel>
+
     private var loadKeywordJob: Job? = null
-
-    private val _isRefreshing = MutableLiveData<Boolean>()
-    val isRefreshing: LiveData<Boolean>
-        get() = _isRefreshing
-
-    private val _keywordItems = MutableLiveData<List<KeywordItem>>()
-    val keywordItems: LiveData<List<KeywordItem>>
-        get() = _keywordItems
-
-    private val _errorEvent = MutableLiveData<Event<Int>>()
-    val errorEvent: LiveData<Event<Int>>
-        get() = _errorEvent
 
     init {
         loadKeywordItems()
@@ -37,17 +39,26 @@ class MainViewModel @Inject constructor(
     fun loadKeywordItems() {
         loadKeywordJob?.cancel()
         loadKeywordJob = viewModelScope.launch {
-            _isRefreshing.postValueIfNew(true)
+            setState { copy(isRefreshing = true) }
             kotlin.runCatching { getKeywordItems() }
                 .onFailure {
                     // TODO Log
-                    _errorEvent.postValue(Event(R.string.main_load_keyword_failed))
-                    _keywordItems.postValue(null)
+                    setState {
+                        copy(
+                            isRefreshing = false,
+                            keywordItems = Fail(it),
+                            errorEvent = Event(R.string.main_load_keyword_failed)
+                        )
+                    }
                 }
                 .onSuccess {
-                    _keywordItems.postValue(it)
+                    setState {
+                        copy(
+                            isRefreshing = false,
+                            keywordItems = Success(it)
+                        )
+                    }
                 }
-            _isRefreshing.postValueIfNew(false)
         }
     }
 
@@ -58,5 +69,24 @@ class MainViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         loadKeywordJob?.cancel()
+    }
+
+    companion object : MvRxViewModelFactory<MainViewModel, MainFragmentState> {
+        override fun create(
+            viewModelContext: ViewModelContext,
+            state: MainFragmentState
+        ): MainViewModel? {
+            val fragmentContext = viewModelContext as? FragmentViewModelContext ?: TODO()
+            val fragment = fragmentContext.fragment as? MainFragment ?: TODO()
+            return fragment.viewModelFactory.create(state)
+        }
+
+        override fun initialState(viewModelContext: ViewModelContext): MainFragmentState? {
+            return MainFragmentState(
+                isRefreshing = true,
+                errorEvent = null,
+                keywordItems = Uninitialized
+            )
+        }
     }
 }

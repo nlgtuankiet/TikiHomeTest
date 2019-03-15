@@ -63,6 +63,9 @@ dependencies {
     implementation(Libs.recyclerview)
     testImplementation(Libs.mockito_kotlin)
     implementation(Libs.kotlinx_coroutines_android)
+    implementation("com.airbnb.android:mvrx:0.7.2")
+    implementation("com.squareup.inject:assisted-inject-annotations-dagger2:0.3.3")
+    kapt("com.squareup.inject:assisted-inject-processor-dagger2:0.3.3")
 }
 
 kapt {
