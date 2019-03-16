@@ -14,12 +14,10 @@ buildscript {
 }
 
 dependencies {
+    implementation(Libs.dagger)
     implementation(Libs.kotlin_stdlib_jdk7)
     implementation(Libs.kotlinx_coroutines_core)
-
-    implementation(Libs.dagger)
     kapt(Libs.dagger_compiler)
-
     testImplementation(Libs.junit_junit)
     testImplementation(Libs.mockito_kotlin)
 }

@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.BaseMvRxViewModel
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -42,12 +41,12 @@ class MainViewModel @AssistedInject constructor(
             setState { copy(isRefreshing = true) }
             kotlin.runCatching { getKeywordItems() }
                 .onFailure {
-                    // TODO Log
+                    val event = Event(R.string.main_load_keyword_failed)
                     setState {
                         copy(
                             isRefreshing = false,
                             keywordItems = Fail(it),
-                            errorEvent = Event(R.string.main_load_keyword_failed)
+                            errorEvent = event
                         )
                     }
                 }

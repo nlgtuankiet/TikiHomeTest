@@ -67,6 +67,24 @@ object Libs {
     const val androidx_test_core: String = "androidx.test:core:" + Versions.androidx_test_core
 
     /**
+     * https://github.com/airbnb/epoxy */
+    const val epoxy_databinding: String = "com.airbnb.android:epoxy-databinding:" +
+            Versions.epoxy_databinding
+
+    /**
+     * https://github.com/airbnb/epoxy */
+    const val epoxy_processor: String = "com.airbnb.android:epoxy-processor:" +
+            Versions.epoxy_processor
+
+    /**
+     * https://github.com/airbnb/epoxy */
+    const val epoxy: String = "com.airbnb.android:epoxy:" + Versions.epoxy
+
+    /**
+     * https://github.com/airbnb/mvrx */
+    const val mvrx: String = "com.airbnb.android:mvrx:" + Versions.mvrx
+
+    /**
      * https://developer.android.com/studio */
     const val aapt2: String = "com.android.tools.build:aapt2:" + Versions.aapt2
 
@@ -111,6 +129,17 @@ object Libs {
      * https://github.com/nhaarman/mockito-kotlin */
     const val mockito_kotlin: String = "com.nhaarman.mockitokotlin2:mockito-kotlin:" +
             Versions.mockito_kotlin
+
+    /**
+     * https://github.com/square/AssistedInject/ */
+    const val assisted_inject_annotations_dagger2: String =
+            "com.squareup.inject:assisted-inject-annotations-dagger2:" +
+            Versions.com_squareup_inject
+
+    /**
+     * https://github.com/square/AssistedInject/ */
+    const val assisted_inject_processor_dagger2: String =
+            "com.squareup.inject:assisted-inject-processor-dagger2:" + Versions.com_squareup_inject
 
     /**
      * https://github.com/square/retrofit/ */

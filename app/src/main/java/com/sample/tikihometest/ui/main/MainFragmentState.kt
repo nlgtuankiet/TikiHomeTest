@@ -2,7 +2,6 @@ package com.sample.tikihometest.ui.main
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
 import com.sample.tikihometest.core.Event
 import com.sample.tikihometest.domain.entity.KeywordItem
 

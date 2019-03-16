@@ -1,8 +1,6 @@
 package com.sample.tikihometest.ui.main.di
 
-import com.sample.tikihometest.di.ActivityScope
 import com.sample.tikihometest.di.FragmentScope
-import com.sample.tikihometest.ui.main.MainActivity
 import com.sample.tikihometest.ui.main.MainFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

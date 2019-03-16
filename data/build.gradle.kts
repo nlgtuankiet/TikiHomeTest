@@ -18,15 +18,15 @@ android {
 }
 
 dependencies {
-    implementation(Libs.kotlin_stdlib_jdk7)
-    implementation(Libs.retrofit)
-    testImplementation(Libs.robolectric)
-    testImplementation(Libs.junit_junit)
-    testImplementation(Libs.androidx_test_core)
     implementation(Libs.converter_moshi)
-    implementation(Libs.kotlinx_coroutines_core)
-    testImplementation(Libs.mockito_kotlin)
-    implementation(project(":domain"))
     implementation(Libs.dagger)
+    implementation(Libs.kotlin_stdlib_jdk7)
+    implementation(Libs.kotlinx_coroutines_core)
+    implementation(Libs.retrofit)
+    implementation(project(":domain"))
     kapt(Libs.dagger_compiler)
+    testImplementation(Libs.androidx_test_core)
+    testImplementation(Libs.junit_junit)
+    testImplementation(Libs.mockito_kotlin)
+    testImplementation(Libs.robolectric)
 }

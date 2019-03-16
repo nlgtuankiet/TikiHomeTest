@@ -28,6 +28,7 @@ class MainFragment : DaggerFragment(), MvRxView {
         super.onCreate(savedInstanceState)
         mvrxViewModelStore.restoreViewModels(this, savedInstanceState)
     }
+    private lateinit var keywordItemsController: KeywordItemController
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,15 +38,15 @@ class MainFragment : DaggerFragment(), MvRxView {
         binding = MainFragmentBinding.inflate(inflater, container, false).apply {
             viewModel = mainViewModel
             setLifecycleOwner(viewLifecycleOwner)
+
             keywordRecyclerView.apply {
+                keywordItemsController = KeywordItemController()
                 layoutManager = LinearLayoutManager(
                     requireContext(),
                     RecyclerView.HORIZONTAL,
                     false
                 )
-                adapter = KeywordItemAdapter(
-                    lifecycleOwner = viewLifecycleOwner
-                )
+                adapter = keywordItemsController.adapter
                 addItemDecoration(KeywordItemDecoration(8))
             }
         }
@@ -67,7 +68,7 @@ class MainFragment : DaggerFragment(), MvRxView {
     override fun invalidate() {
         withState(mainViewModel) {
             binding.state = it
-            (binding.keywordRecyclerView.adapter as KeywordItemAdapter).submitList(it.keywordItems())
+            keywordItemsController.setData(it.keywordItems())
             it.errorEvent?.getContentIfNotHandled()?.let { messageId ->
                 displayToast(messageId)
             }
